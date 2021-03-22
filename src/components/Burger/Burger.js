@@ -4,7 +4,7 @@ import classesCss from './Burger.css';
 
 const burger = (props)=>{
 
-    const ingredientsOfBureger = Object.keys(props.ingredients).map(
+    let ingredientsOfBureger = Object.keys(props.ingredients).map(
         ingredientKey => {
             return [...Array(props.ingredients[ingredientKey])].map(
                 (_,i) => {
@@ -12,7 +12,13 @@ const burger = (props)=>{
                 }
             );
         }
-    );
+    ).reduce((arr,el)=>{
+        return arr.concat(el);
+    },[]);
+    if(ingredientsOfBureger.length ===0 ){
+        ingredientsOfBureger = <p> Please start adding ingredients !</p>
+    }
+ 
    return (
         <div className={classesCss.Burger}>
             <BurgerIngredients type="bread-top"/>
