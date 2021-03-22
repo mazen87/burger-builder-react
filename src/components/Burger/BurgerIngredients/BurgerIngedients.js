@@ -2,7 +2,7 @@ import React from 'react';
 import classesCss from './BurgerIngredients.css';
 import PropTypes from 'prop-types';
 
-const BurgerIngredients = (props)=> {
+const burgerIngredients = (props)=> {
     let ingredients = null;
 
     switch(props.type) {
@@ -12,8 +12,8 @@ const BurgerIngredients = (props)=> {
         case 'bread-top' :
             ingredients = (
                 <div className={classesCss.BreadTop}>
-                        <div className={classesCss.Seed1}></div>
-                        <div className={classesCss.Seed2}></div>
+                        <div className={classesCss.Seeds1}></div>
+                        <div className={classesCss.Seeds2}></div>
                 </div>
                 );    
             break;
@@ -34,11 +34,10 @@ const BurgerIngredients = (props)=> {
     };
 
     return ingredients;
-
 };
 
-BurgerIngredients.propTypes = {
+burgerIngredients.propTypes = {
     type : PropTypes.string.isRequired
 };
 
-export default BurgerIngredients;
+export default burgerIngredients;
