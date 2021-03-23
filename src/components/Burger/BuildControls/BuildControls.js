@@ -23,8 +23,8 @@ const buildControls = (props) => {
                     )
                 )
                 }
-                <button className={classesCss.OrderButton}  onClick={props.info} 
-                 disabled={!props.OrderButton} > Passing Order</button>
+                <button className={classesCss.OrderButton}  onClick={props.showSummary} 
+                 disabled={!props.OrderButton}> Passing Order</button>
             </div>
         );
 }
