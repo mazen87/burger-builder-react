@@ -65,6 +65,10 @@ class BurgerBuilder extends Component {
         this.orderDisabledHandler(currentIngredients);
         }
 
+    hideSummaryHandler = ()=> {
+        this.setState({showSummary: false})
+    }    
+
     removeElementHandler = (type) => {
         const currentIngredients = {...this.state.ingredients};
         const currentIngredientValue = currentIngredients[type];
@@ -100,15 +104,16 @@ class BurgerBuilder extends Component {
         return (
             <Aux>
             
-                 <Modal summaryShow={this.state.showSummary}>
+                 <Modal summaryShow={this.state.showSummary} summaryHide={this.hideSummaryHandler}>
                  <OrderSummary  ingredients={this.state.ingredients} price={this.state.totalPrice}/>
                 </Modal>
    
                 <Burger  ingredients={this.state.ingredients}  />
                 <BuildCotrols  addIngred={this.addElementHandler}  price={this.state.totalPrice}
                 removIngrd={this.removeElementHandler} disableButton={disableInfo} 
-                OrderButton={this.state.orderdisabled} showSummary={this.modalSummaryHandler} />
-                
+                OrderButton={this.state.orderdisabled} showSummary={this.modalSummaryHandler}
+                ingredientsPrices={INGREDIENTS_PRICES} />
+
             </Aux>
         );
     };

@@ -19,7 +19,7 @@ const buildControls = (props) => {
                          <BuildControl  key={control.label} label={control.label} 
                          addIngredient={()=>props.addIngred(control.type)}  
                          removeIngredient={()=> props.removIngrd(control.type)} 
-                         toDisable={props.disableButton[control.type]} />
+                         toDisable={props.disableButton[control.type]} ingredientsPrices={props.ingredientsPrices}/>
                     )
                 )
                 }
