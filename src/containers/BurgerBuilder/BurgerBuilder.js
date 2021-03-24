@@ -36,7 +36,7 @@ class BurgerBuilder extends Component {
         ).reduce((total,element)=>{
               return total+element;
         },0);
-          console.log(arrayIngredientsValues);
+          //console.log(arrayIngredientsValues);
           this.setState({orderdisabled: arrayIngredientsValues > 0 });
           /*
           if(arrayIngredientsValues > 0) {
@@ -68,6 +68,10 @@ class BurgerBuilder extends Component {
     hideSummaryHandler = ()=> {
         this.setState({showSummary: false})
     }    
+
+    continueOrderHandler = () => {
+        alert('continue your order !');
+    }
 
     removeElementHandler = (type) => {
         const currentIngredients = {...this.state.ingredients};
@@ -105,7 +109,8 @@ class BurgerBuilder extends Component {
             <Aux>
             
                  <Modal summaryShow={this.state.showSummary} summaryHide={this.hideSummaryHandler}>
-                 <OrderSummary  ingredients={this.state.ingredients} price={this.state.totalPrice}/>
+                 <OrderSummary  ingredients={this.state.ingredients} price={this.state.totalPrice}  
+                 orderCancel={this.hideSummaryHandler}  orderContinue={this.continueOrderHandler} />
                 </Modal>
    
                 <Burger  ingredients={this.state.ingredients}  />
