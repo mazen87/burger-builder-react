@@ -12,23 +12,38 @@ const INGREDIENTS_PRICES = {
     salad: 0.6,
     bacon: 0.8,
     cheese: 1,
-    meat: 1.5
+    meat: 1.5,
+    onion: 0.4
 }
 
 class BurgerBuilder extends Component {
 
     state = {
-        ingredients : {
+        ingredients : null,
+        /*
+        {
             bacon: 0,
             cheese:0,
             meat : 0,
-            salad: 0
-        },
+            salad: 0,
+            onion:0
+        }
+        
+        ,
+        */
         totalPrice: 0.5,
         orderdisabled : false,
         showSummary: false,
         showSpinner:false,
-        orderSaved:false
+        orderSaved:false,
+    }
+
+    componentDidMount () {
+        axios.get('https://react-my-burger-74e2c-default-rtdb.firebaseio.com/ingredients.json')
+        .then(response => {
+            this.setState({ingredients : response.data});
+        })
+        .catch(error => this.setState({error: true}));
     }
 
     hideMessageOrderSavedHandler = () => {
@@ -128,6 +143,7 @@ class BurgerBuilder extends Component {
     }
         
     render () {
+
         let disableInfo = {...this.state.ingredients};
         for(let ingrd in disableInfo) {
             /*
@@ -141,10 +157,12 @@ class BurgerBuilder extends Component {
             // return  disableInfo{ meat : true,salad:false}
         }
 
-        let orderSummary =   <OrderSummary  ingredients={this.state.ingredients} 
+        let orderSummary =  null;
+        
+        {/* <OrderSummary  ingredients={this.state.ingredients} 
                                 price={this.state.totalPrice}  
                                 orderCancel={this.hideSummaryHandler}  
-                                orderContinue={this.continueOrderHandler} />;
+                                orderContinue={this.continueOrderHandler} />; */}
 
         if(this.state.showSpinner){
            orderSummary =  <Spinner />
@@ -157,19 +175,44 @@ class BurgerBuilder extends Component {
                             order has been registered successfully
                           </div>
         }
-     
+
+        let burger = this.state.error ? <p style={{textAlign:'center' ,color:'red', fontWeight:'bold' ,fontSize:'1.5em'}}>
+             ingredients can not be loaded ! </p> : <Spinner />
+        if(this.state.ingredients){
+
+            orderSummary = <OrderSummary  ingredients={this.state.ingredients} 
+            price={this.state.totalPrice}  
+            orderCancel={this.hideSummaryHandler}  
+            orderContinue={this.continueOrderHandler} />;
+
+
+            burger = (
+                
+            <Aux>    
+                <Burger  ingredients={this.state.ingredients}  />
+                {message}
+                <BuildCotrols  addIngred={this.addElementHandler}  price={this.state.totalPrice}
+                removIngrd={this.removeElementHandler} disableButton={disableInfo} 
+                OrderButton={this.state.orderdisabled} showSummary={this.modalSummaryHandler}
+                ingredientsPrices={INGREDIENTS_PRICES} /> 
+            </Aux>    
+            );
+        }
+
         return (
             <Aux>
             
                 <Modal summaryShow={this.state.showSummary} summaryHide={this.hideSummaryHandler}>
                   {orderSummary}
                 </Modal>
+                {/* 
                 <Burger  ingredients={this.state.ingredients}  />
                 {message}
                 <BuildCotrols  addIngred={this.addElementHandler}  price={this.state.totalPrice}
                 removIngrd={this.removeElementHandler} disableButton={disableInfo} 
                 OrderButton={this.state.orderdisabled} showSummary={this.modalSummaryHandler}
-                ingredientsPrices={INGREDIENTS_PRICES} />
+                ingredientsPrices={INGREDIENTS_PRICES} /> */} 
+                {burger}
 
             </Aux>
         );
