@@ -11,7 +11,7 @@ class Modal extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-              return nextProps.summaryShow !== this.props.summaryShow;
+              return (nextProps.summaryShow !== this.props.summaryShow || nextProps.children !== this.props.children);
     }
 
     render () {
