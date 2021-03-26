@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/WithErrorHandler';
 
 const INGREDIENTS_PRICES = {
     salad: 0.6,
@@ -26,9 +27,15 @@ class BurgerBuilder extends Component {
         totalPrice: 0.5,
         orderdisabled : false,
         showSummary: false,
-        showSpinner:false
+        showSpinner:false,
+        orderSaved:false
     }
 
+    hideMessageOrderSavedHandler = () => {
+        setTimeout(()=>{
+            this.setState({orderSaved:false})
+        },2200);
+    };
     orderDisabledHandler = (ingredients)=> {
 
         const arrayIngredientsValues = Object.keys(ingredients).map(
@@ -89,8 +96,17 @@ class BurgerBuilder extends Component {
             deliveryMethod: 'fastest'
         }
         axios.post('/orders.json', order)
-        .then(response =>   this.setState({showSpinner: false,showSummary:false}))
-        .catch(error =>     this.setState({showSpinner: false ,showSummary:false}));
+        .then(response =>   {
+            this.setState({showSpinner:false ,showSummary:false});
+            console.log(response);
+           if(response){
+            this.setState({orderSaved: true})
+            this.hideMessageOrderSavedHandler();
+           }
+         
+        
+        })
+        .catch(error => this.setState({showSpinner: false ,showSummary:false , overSaved:false}));
     }
 
     removeElementHandler = (type) => {
@@ -133,6 +149,14 @@ class BurgerBuilder extends Component {
         if(this.state.showSpinner){
            orderSummary =  <Spinner />
         }
+         
+        let message =null;
+        if(this.state.orderSaved){
+         message = <div style={{width:'100%',height:'200px', margin:'auto',color:'green',padding: '10px' , 
+                        textAlign:'center', fontWeight:'bold',fontSize:'2em'}}>
+                            order has been registered successfully
+                          </div>
+        }
      
         return (
             <Aux>
@@ -140,8 +164,8 @@ class BurgerBuilder extends Component {
                 <Modal summaryShow={this.state.showSummary} summaryHide={this.hideSummaryHandler}>
                   {orderSummary}
                 </Modal>
-   
                 <Burger  ingredients={this.state.ingredients}  />
+                {message}
                 <BuildCotrols  addIngred={this.addElementHandler}  price={this.state.totalPrice}
                 removIngrd={this.removeElementHandler} disableButton={disableInfo} 
                 OrderButton={this.state.orderdisabled} showSummary={this.modalSummaryHandler}
@@ -151,4 +175,4 @@ class BurgerBuilder extends Component {
         );
     };
 }
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder,axios);
