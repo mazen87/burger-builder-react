@@ -39,11 +39,12 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount () {
-        axios.get('https://react-my-burger-74e2c-default-rtdb.firebaseio.com/ingredients.json')
+
+         axios.get('https://react-my-burger-74e2c-default-rtdb.firebaseio.com/ingredients.json')
         .then(response => {
             this.setState({ingredients : response.data});
         })
-        .catch(error => this.setState({error: true}));
+        .catch(error => this.setState({error: true})); 
     }
 
     hideMessageOrderSavedHandler = () => {
@@ -141,6 +142,19 @@ class BurgerBuilder extends Component {
             this.orderDisabledHandler(currentIngredients);
         }
     }
+
+    continueToCheckoutHandler  = ()  => {
+        const queryParams = [];
+        for (let i in this.state.ingredients){
+            queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]));
+        }
+        const queryParamsString = queryParams.join('&');
+        this.props.history.push({
+            pathname : '/checkout',
+            search : '?'+queryParamsString
+        });
+    }
+ 
         
     render () {
 
@@ -180,10 +194,12 @@ class BurgerBuilder extends Component {
              ingredients can not be loaded ! </p> : <Spinner />
         if(this.state.ingredients){
 
-            orderSummary = <OrderSummary  ingredients={this.state.ingredients} 
+            orderSummary = <OrderSummary ingredients={this.state.ingredients} 
             price={this.state.totalPrice}  
             orderCancel={this.hideSummaryHandler}  
-            orderContinue={this.continueOrderHandler} />;
+            //orderContinue={this.continueOrderHandler} 
+            goToCheckout={this.continueToCheckoutHandler}
+            />;
 
 
             burger = (
