@@ -6,16 +6,11 @@ import {Route} from 'react-router-dom';
 class Checkout extends Component {
 
     state= {
-        ingredients : {
-            salad:1,
-            cheese:1,
-            meat:1,
-            bacon:1,
-            onion:1
-        }
+        ingredients : null
     }
 
-    componentDidMount () {
+ /*    constructor (props) {
+        super(props);
         const query = new URLSearchParams(this.props.location.search);
         const paramIngredients = {};
         for (let param of query.entries()){
@@ -23,7 +18,23 @@ class Checkout extends Component {
         }
 
         this.setState({ingredients:paramIngredients});
-    } 
+
+    } */
+     componentWillMount () {
+        const query = new URLSearchParams(this.props.location.search);
+        const paramIngredients = {};
+        let price =0;
+        for (let param of query.entries()){
+            if(param[0] === 'price'){
+                price = +param[1];
+            }else {
+                paramIngredients[param[0]] = +param[1];
+            }
+         
+        }
+
+        this.setState({ingredients:paramIngredients , totalPrice:price});
+    }  
     cancelCheckoutHandler = ()=> {
        /*  const queryParams = [];
         for (let i in this.state.ingredients){
@@ -46,7 +57,9 @@ class Checkout extends Component {
                 <CheckoutSummary  ingredients={this.state.ingredients} 
                 continueCheckout={this.continueCheckoutHandler}
                 cancelCheckout={this.cancelCheckoutHandler} />
-                <Route path={this.props.match.path+'/contact-data'} component={ContactData} />
+                <Route path={this.props.match.path+'/contact-data'}  
+                    render={(props) => (<ContactData  ingredients={this.state.ingredients}  price={this.state.totalPrice}  {...props} /> )}
+                />
             </div>
          
         );

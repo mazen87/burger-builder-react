@@ -47,11 +47,7 @@ class BurgerBuilder extends Component {
         .catch(error => this.setState({error: true})); 
     }
 
-    hideMessageOrderSavedHandler = () => {
-        setTimeout(()=>{
-            this.setState({orderSaved:false})
-        },2200);
-    };
+   
     orderDisabledHandler = (ingredients)=> {
 
         const arrayIngredientsValues = Object.keys(ingredients).map(
@@ -94,7 +90,7 @@ class BurgerBuilder extends Component {
         this.setState({showSummary: false})
     }    
 
-    continueOrderHandler = () => {
+  /*   continueOrderHandler = () => {
         //alert('continue your order !');
         this.setState({showSpinner: true});
         const order = {
@@ -124,7 +120,7 @@ class BurgerBuilder extends Component {
         })
         .catch(error => this.setState({showSpinner: false ,showSummary:false , overSaved:false}));
     }
-
+ */
     removeElementHandler = (type) => {
         const currentIngredients = {...this.state.ingredients};
         const currentIngredientValue = currentIngredients[type];
@@ -148,6 +144,7 @@ class BurgerBuilder extends Component {
         for (let i in this.state.ingredients){
             queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]));
         }
+        queryParams.push('price='+this.state.totalPrice);
         const queryParamsString = queryParams.join('&');
         this.props.history.push({
             pathname : '/checkout',
@@ -182,14 +179,14 @@ class BurgerBuilder extends Component {
            orderSummary =  <Spinner />
         }
          
-        let message =null;
+       /*  let message =null;
         if(this.state.orderSaved){
          message = <div style={{width:'100%',height:'200px', margin:'auto',color:'green',padding: '10px' , 
                         textAlign:'center', fontWeight:'bold',fontSize:'2em'}}>
                             order has been registered successfully
                           </div>
         }
-
+ */
         let burger = this.state.error ? <p style={{textAlign:'center' ,color:'red', fontWeight:'bold' ,fontSize:'1.5em'}}>
              ingredients can not be loaded ! </p> : <Spinner />
         if(this.state.ingredients){
@@ -206,7 +203,7 @@ class BurgerBuilder extends Component {
                 
             <Aux>    
                 <Burger  ingredients={this.state.ingredients}  />
-                {message}
+           {/*      {message} */}
                 <BuildCotrols  addIngred={this.addElementHandler}  price={this.state.totalPrice}
                 removIngrd={this.removeElementHandler} disableButton={disableInfo} 
                 OrderButton={this.state.orderdisabled} showSummary={this.modalSummaryHandler}
