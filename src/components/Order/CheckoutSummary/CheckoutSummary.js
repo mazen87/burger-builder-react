@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../UI/Button/Button';
-import Burger from '../Burger/Burger';
+import Button from '../../UI/Button/Button';
+import Burger from '../../Burger/Burger';
 import classesCss from './CheckoutSummary.css';
 
 const checkoutSummary = (props) => {
