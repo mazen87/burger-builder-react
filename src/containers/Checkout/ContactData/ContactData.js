@@ -110,6 +110,20 @@ class ContactData extends Component {
         .catch(error => this.setState({showSpinner: false ,showSummary:false , overSaved:false}));
     }
 
+    onChangeHandler = (event,elemntIdentifier)=> {
+        const orderFormUpdate = {... this.state.orderForm};
+        const formElementUpadate = {...this.state.orderForm[elemntIdentifier]}
+
+        formElementUpadate.value = event.target.value;
+        orderFormUpdate[elemntIdentifier] = formElementUpadate;
+
+        this.setState({ 
+            orderForm : orderFormUpdate
+        })
+
+       
+    }
+
     render () {
         let formArray = [];
         for (let key in this.state.orderForm){
@@ -125,7 +139,8 @@ class ContactData extends Component {
                 {formArray.map(
                     formArrayElement => 
                     (
-                        <FormInput  elementType={formArrayElement.elementConfig.elementType} 
+                        <FormInput  changed={(event)=> this.onChangeHandler(event,formArrayElement.id )}
+                                    elementType={formArrayElement.elementConfig.elementType} 
                                     key={formArrayElement.id}
                                     elementAttributes={formArrayElement.elementConfig.elementAttributes}
                                     /* value={formArrayElement.elementConfig.value} */
