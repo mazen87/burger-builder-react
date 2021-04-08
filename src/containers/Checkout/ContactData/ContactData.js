@@ -32,7 +32,7 @@ class ContactData extends Component {
                 },
                 value : ''
             },
-            postaCode : {
+            postalCode : {
                 elementType : 'input',
                 elementAttributes : {
                     type: 'text',
@@ -61,7 +61,7 @@ class ContactData extends Component {
 
                     ]
                 },
-                value : ''
+                value : 'fastest'
             },
         },
     
@@ -78,11 +78,18 @@ class ContactData extends Component {
     };
 
     orderHandler = () => {
+/*         event.preventDefault();
+ */      
+        let formData = {};
+        for (let identifier in this.state.orderForm){
+           
+            formData[identifier] = this.state.orderForm[identifier].value;
+        }
         this.setState({showSpinner: true});
         const order = {
             ingredients : this.props.ingredients,
             price: this.props.price,
-
+            orderData : formData
             /* customer: {
                 adress: {
                     country:'portugal',
@@ -110,10 +117,11 @@ class ContactData extends Component {
         .catch(error => this.setState({showSpinner: false ,showSummary:false , overSaved:false}));
     }
 
-    onChangeHandler = (event,elemntIdentifier)=> {
+    onChangeHandler = (event,elemntIdentifier)=> { 
+        event.preventDefault();
         const orderFormUpdate = {... this.state.orderForm};
-        const formElementUpadate = {...this.state.orderForm[elemntIdentifier]}
-
+        const formElementUpadate = {...orderFormUpdate[elemntIdentifier]}
+        
         formElementUpadate.value = event.target.value;
         orderFormUpdate[elemntIdentifier] = formElementUpadate;
 
@@ -125,7 +133,7 @@ class ContactData extends Component {
     }
 
     render () {
-        let formArray = [];
+        const formArray = [];
         for (let key in this.state.orderForm){
             formArray.push({
                 id:key,
@@ -135,7 +143,7 @@ class ContactData extends Component {
 
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {formArray.map(
                     formArrayElement => 
                     (
@@ -143,7 +151,8 @@ class ContactData extends Component {
                                     elementType={formArrayElement.elementConfig.elementType} 
                                     key={formArrayElement.id}
                                     elementAttributes={formArrayElement.elementConfig.elementAttributes}
-                                    /* value={formArrayElement.elementConfig.value} */
+                                    value={formArrayElement.elementConfig.value} 
+                                    
                         />
                     )
                 )}
@@ -153,7 +162,7 @@ class ContactData extends Component {
             <FormInput inputtype="input" type="text" placeholder="Postal code " /> */}
 
 
-            <Button btnType="Success" clicked={this.orderHandler}> Order</Button>
+            <Button btnType="Success"> Order</Button>
         </form>
         );
 
