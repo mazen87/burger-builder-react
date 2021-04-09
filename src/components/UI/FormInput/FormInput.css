@@ -24,3 +24,7 @@
 .InputElement:focus {
     background-color: #ccc;
 }
+
+.Invalid {
+    background-color: rgb(247, 135, 122);
+}
